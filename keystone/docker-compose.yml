@@ -1,0 +1,27 @@
+nginx:
+    image: justinltodd/nginx-proxy:v1
+    volumes:
+       - /var/run/docker.sock:/tmp/docker.sock:ro
+    environment:
+        - DEFAULT_HOST=localhost
+    ports:
+        - "80:80"
+    restart: always
+mongo:
+    image: justinltodd/mongodb:v1
+    ports:
+        - "27017:27017"
+    restart: always
+web:
+    image: justinltodd/keystonejs:v1
+    #build: ../keystone
+    links:
+        - mongo:mongo
+    volumes:
+        - .:/usr/src/app
+    environment:
+        - VIRTUAL_HOST=localhost
+    env_file: .env
+    ports:
+        - "3000:3000"
+    restart: always

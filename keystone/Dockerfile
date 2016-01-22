@@ -1,0 +1,20 @@
+FROM node
+
+MAINTAINER  Justin Todd
+
+ENV KEYSTONEJS_VERSION 0.3.16
+
+ENV NODE_MODULE_INSTALLATION_PATH /usr/src/modules
+ENV NODE_PATH $NODE_MODULE_INSTALLATION_PATH/node_modules
+
+RUN mkdir -p $NODE_MODULE_INSTALLATION_PATH
+WORKDIR $NODE_MODULE_INSTALLATION_PATH
+
+RUN npm install dotenv@1.2.0
+RUN npm install keystone@$KEYSTONEJS_VERSION
+
+WORKDIR /usr/src/app
+
+EXPOSE 3000
+
+CMD [ "node", "keystone.js" ]

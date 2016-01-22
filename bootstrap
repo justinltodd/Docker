@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+# ADD DOCKER REPOSITORY
+tee /etc/yum.repos.d/docker.repo <<-'EOF'
+[dockerrepo]
+name=Docker Repository
+baseurl=https://yum.dockerproject.org/repo/main/centos/$releasever/
+enabled=1
+gpgcheck=1
+gpgkey=https://yum.dockerproject.org/gpg
+EOF
+
+# INSTALL APPS - DOCKER, HTTPD, VIM
+yum -y update
+yum install -y httpd vim docker-engine curl wget
+
+# START SERVICES
+service httpd start
+service iptables stop
+service docker start
+
+# MAKE SURE SERVICES ARE activated/disable on boot
+chkconfig iptables off
+chkconfig httpd on
+chkconfig docker on
+
+# SETUP SYMLINK FOR SYNCING FILES VAGRANT
+if ! [ -L /var/vagrant ]; then
+  rm -rf /var/vagrant
+  ln -fs /vagrant /var/vagrant
+fi
+
+# INSTALL DOCKER-COMPOSE
+curl -L https://github.com/docker/compose/releases/download/1.5.2/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+
+# Apply executable permissions to the binary
+chmod +x /usr/local/bin/docker-compose

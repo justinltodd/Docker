@@ -11,5 +11,5 @@
 
 4. Run the container by the following command
 
-        docker run -p 80:3000 -it -d --link your-mongo:mongo --name keystonejs -v "$PWD":/usr/src/app ngyukman/keystonejs
+        docker run -p 80:3000 -it -d --link your-mongo:mongo --name keystonejs -v "$PWD":/usr/src/app justinltodd/keystonejs:v1
 
